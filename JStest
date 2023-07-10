@@ -1,0 +1,72 @@
+// 1. Count Employees Number by Factory
+const employeeCountByFactory = factories.map(factory => ({
+  name: factory.name,
+  count: factory.employees.length
+}));
+console.log(employeeCountByFactory);
+
+// 2. Count Factories Number by Employee
+const factoriesCountByEmployee = {};
+factories.forEach(factory => {
+  factory.employees.forEach(employee => {
+    if (!factoriesCountByEmployee[employee]) {
+      factoriesCountByEmployee[employee] = 0;
+    }
+    factoriesCountByEmployee[employee]++;
+  });
+});
+const factoryCountByEmployees = Object.entries(factoriesCountByEmployee).map(([employee, count]) => ({
+  employee,
+  count
+}));
+console.log(factoryCountByEmployees);
+
+// 3. Order employees list by alphabetical order
+const orderedEmployees = factories.map(factory => ({
+  name: factory.name,
+  employees: factory.employees.sort()
+}));
+console.log(orderedEmployees);
+
+// 4. Count total hours worked in 1 day
+function countTotalHoursWorked() {
+  let totalHours = 0;
+  employeeType.forEach(type => {
+    const [beginHour, beginMin, beginSec] = type.work_begin.split(":");
+    const [endHour, endMin, endSec] = type.work_end.split(":");
+    const beginTime = new Date().setHours(beginHour, beginMin, beginSec);
+    const endTime = new Date().setHours(endHour, endMin, endSec);
+    const workDuration = endTime > beginTime ? endTime - beginTime : 24 * 60 * 60 * 1000 - beginTime + endTime;
+    totalHours += workDuration;
+  });
+  return Math.floor(totalHours / (1000 * 60 * 60));
+}
+
+console.log("Total hours worked in 1 day:", countTotalHoursWorked());
+
+// 5. Make a function that takes dayTime as a parameter and returns the number of employees working
+function howManyEmployeeByTime(time) {
+  const [hour, min, sec] = time.split(":");
+  const currentTime = new Date().setHours(hour, min, sec);
+  const workingEmployees = employees.filter(employee => {
+    const employeeTypeData = employeeType.find(type => type.id === employee.type);
+    const [beginHour, beginMin, beginSec] = employeeTypeData.work_begin.split(":");
+    const [endHour, endMin, endSec] = employeeTypeData.work_end.split(":");
+    const beginTime = new Date().setHours(beginHour, beginMin, beginSec);
+    const endTime = new Date().setHours(endHour, endMin, endSec);
+    return currentTime >= beginTime && currentTime <= endTime;
+  });
+  return workingEmployees.length;
+}
+
+console.log("Number of employees working at 14:30:00:", howManyEmployeeByTime("14:30:00"));
+
+// 6. How many days of work are needed to complete all tasks?
+function calculateTotalTaskDuration() {
+  const totalDuration = tasks.reduce((total, task) => total + task.duration, 0);
+  const workingHoursPerDay = countTotalHoursWorked();
+  const daysNeeded = Math.ceil(totalDuration / (workingHoursPerDay * 60));
+  return daysNeeded;
+}
+
+console.log("Number of days needed to complete all tasks:", calculateTotalTaskDuration());
