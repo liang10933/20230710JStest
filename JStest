@@ -1,4 +1,4 @@
-// 1. Count Employees Number by Factory 
+// 1. Count Employees Number by Factory
 
       const employeeCountByFactory = factories.map(factory => 
       ({
